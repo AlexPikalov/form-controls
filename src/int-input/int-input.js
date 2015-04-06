@@ -5,7 +5,7 @@
 
     /**
      * @ngdoc directive
-     * @name formControls.intInputStep:intInputStep
+     * @name formControls.intInputStep:intInput
      * @restrict A
      * @scope
      * @priority 0
@@ -33,11 +33,33 @@
      * `^` and `$` characters. For instance, `"abc"` will be converted to `new RegExp('^abc$')`.
      * @param {string=} ngChange Link to a function that will be invoked on each value change.
      *
+     * @example
+        <example module="ex">
+            <file name="index.js">
+                angular.module('ex', [ 'formControls.intInput' ]).controller('ExampleIntInputCtrl', ['$scope', function ($scope) {
+                    $scope.value = 0;
+                    $scope.count = 0;
+                    $scope.tick = function () {
+                        $scope.count += 1;
+                    };
+                }]);
+            </file>
+            <file name="index.html">
+                <form name="myForm" ng-controller="ExampleIntInputCtrl">
+                    Count: <span>{{count}}</span>
+                    <div name="myInput" ng-model="value" ng-change="tick" int-input min="0" max="5"></div>
+                    <div>Form is valid - <b>{{myForm.$valid}}</b></div>
+                    <div>Input is valid - <b>{{myForm.myInput.$valid}}</b></div>
+                    <div>Input is touched - <b>{{myForm.myInput.$touched}}</b></div>
+                    <div>Input is dirty - <b>{{myForm.myInput.$dirty}}</b></div>
+                </form>
+            </file>
+        </example>
      *
      */
 
-    angular.module('formControls.intInputStep', [ 'formControls.intInputStep.tpl' ]);
-    angular.module('formControls.intInputStep').directive('intInputStep', intInputStepDirective);
+    angular.module('formControls.intInput', [ 'formControls.intInput.tpl' ]);
+    angular.module('formControls.intInput').directive('intInput', intInputStepDirective);
 
     //functions
     intInputStepDirective.$inject = [ '$compile' ];
@@ -48,7 +70,7 @@
                 value: '=ngModel',
                 ngChange: '='
             },
-            templateUrl: 'templates/int-input-step.tpl.html',
+            templateUrl: 'templates/int-input.tpl.html',
             restrict: 'A',
             require: 'ngModel',
             link: link
@@ -68,12 +90,11 @@
                 ngModelController.$pristine && ngModelController.$setDirty();
             };
 
-            scope.$watch('value', setValidities);
-
-            element.find('input').blur(function () {
+            scope.onBlur = function () {
                 ngModelController.$untouched && ngModelController.$setTouched();
-            });
+            };
 
+            scope.$watch('value', setValidities);
 
             function setValidities(newVal, oldVal) {
                 if (angular.isUndefined(newVal)) { return; }
@@ -88,7 +109,7 @@
                     ngModelController.$setValidity('pattern',
                         attrs.ngPattern.test(newVal.toString()));
                 }
-                if (angular.isFunction(scope.ngChange)) {
+                if (angular.isFunction(scope.ngChange) && newVal !== oldVal) {
                     scope.ngChange(newVal, oldVal);
                 }
             }

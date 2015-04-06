@@ -9,6 +9,18 @@ module.exports = function (grunt) {
             }
         },
         ngdocs: {
+            options: {
+                scripts: [
+                    'bower_components/jquery/dist/jquery.js',
+                    'bower_components/angular/angular.js',
+                    'bower_components/angular-animate/angular-animate.js',
+                    'src/int-input/int-input.js',
+                    'src/int-input/int-input.tpl.js'
+                ],
+                styles: [
+                    'doc-styles/index.css'
+                ]
+            },
             all: {
                 src: [ 'src/**/*.js', '!src/**/*.spec.js' ]
             }
