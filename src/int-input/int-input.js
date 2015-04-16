@@ -68,7 +68,7 @@
         return {
             scope: {
                 value: '=ngModel',
-                ngChange: '='
+                ngChange: '&'
             },
             templateUrl: 'templates/int-input.tpl.html',
             restrict: 'A',
@@ -110,7 +110,7 @@
                         attrs.ngPattern.test(newVal.toString()));
                 }
                 if (angular.isFunction(scope.ngChange) && newVal !== oldVal) {
-                    scope.ngChange(newVal, oldVal);
+                    scope.ngChange();
                 }
             }
         }

@@ -270,7 +270,7 @@ describe('int-input', function () {
             scope.val = 555;
             spyOn(scope, 'cb');
 
-            var el = '<form name="testForm"><div name="testInput" ng-model="val" ng-change="cb" int-input></div></form>';
+            var el = '<form name="testForm"><div name="testInput" ng-model="val" ng-change="cb()" int-input></div></form>';
             el = $compile(el)(scope);
             scope.$digest();
 
